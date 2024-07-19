@@ -25,25 +25,50 @@ class _PlaySongState extends State<PlaySong> {
     super.initState();
   }
 
+  // void initSong() async {
+  //   await assetsAudioPlayer.open(
+  //     widget.songs[currentIndex],
+  //     autoStart: false,
+  //   );
+  //   assetsAudioPlayer.currentPosition.listen((event) {
+  //     valueEx = event.inSeconds;
+  //     setState(() {});
+  //   });
+  //   assetsAudioPlayer.current.listen(
+  //     (event) {
+  //       if (event != null) {
+  //         durationEx = event.audio.duration.inSeconds;
+  //         setState(() {});
+  //       }
+  //     },
+  //   );
+
+  //   setState(() {});
+  // }
+
   void initSong() async {
     await assetsAudioPlayer.open(
       widget.songs[currentIndex],
       autoStart: false,
     );
     assetsAudioPlayer.currentPosition.listen((event) {
-      valueEx = event.inSeconds;
-      setState(() {});
+      if (mounted) {
+        valueEx = event.inSeconds;
+        setState(() {});
+      }
     });
     assetsAudioPlayer.current.listen(
       (event) {
-        if (event != null) {
+        if (event != null && mounted) {
           durationEx = event.audio.duration.inSeconds;
           setState(() {});
         }
       },
     );
 
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
